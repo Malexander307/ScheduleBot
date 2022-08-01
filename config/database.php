@@ -34,7 +34,11 @@ return [
     */
 
     'connections' => [
-
+        'mongodb' => [
+            'driver' => 'mongodb',
+            'dsn' => env('DB_URI', 'mongodb+srv://TestUser:Q8cX3Zy8pCYTD4gd@cluster0.y2zaw.mongodb.net/?retryWrites=true&w=majority'),
+            'database' => 'myappdb',
+        ],
         'sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DATABASE_URL'),

@@ -14,7 +14,9 @@ class ScheduleParser
                     try {
                         $childNode = $childNode->childNodes->item(0);
                         $r[] = $this->formatingSchedule($childNode);
-                    }catch (\ErrorException $e){}
+                    }catch (\ErrorException $e){
+
+                    }
                 }
                 $result[] = $r;
             }
@@ -32,7 +34,7 @@ class ScheduleParser
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         $data = "faculty=1002&teacher=''&course=2&group=".
             iconv('UTF-8', 'windows-1251', 'ІПЗ-21').
-            "&sdate=06.04.2022&edate=06.06.2022&n=700";
+            "&sdate=06.04.2022&edate=06.04.2022&n=700";
         curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
