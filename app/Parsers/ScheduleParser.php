@@ -4,6 +4,15 @@ namespace App\Parsers;
 
 class ScheduleParser
 {
+    private $date;
+    private $group;
+
+    public function __construct($date, $group)
+    {
+        $this->date = $date;
+        $this->group = $group;
+    }
+
     public function parse(){
         $nodes = $this->getNodes();
         $result = [];
@@ -33,13 +42,14 @@ class ScheduleParser
         $headers = array("Content-Type: application/x-www-form-urlencoded");
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         $data = "faculty=1002&teacher=''&course=2&group=".
-            iconv('UTF-8', 'windows-1251', 'ІПЗ-21').
-            "&sdate=06.04.2022&edate=06.04.2022&n=700";
+            iconv('UTF-8', 'windows-1251', $this->group).
+            "&sdate={$this->date}&edate={$this->date}&n=700";
         curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         $resp = curl_exec($curl);
         curl_close($curl);
+        logs()->info(iconv('UTF-8', 'windows-1251', utf8_decode($this->group)));
         return $resp;
     }
 
@@ -60,7 +70,11 @@ class ScheduleParser
 
     private function getNodes(){
         $dom = new \DOMDocument();
-        $dom->loadHTML($this->getHtml());
+        $internalErrors = libxml_use_internal_errors(true);
+        $dom->loadHTML(
+            $this->getHtml()
+        );
+        libxml_use_internal_errors($internalErrors);
         $finder = new \DOMXPath($dom);
         $classname="col-md-6";
         return $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]");

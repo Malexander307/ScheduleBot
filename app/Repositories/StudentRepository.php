@@ -6,7 +6,7 @@ use App\Models\Student;
 
 class StudentRepository
 {
-    public function getStudentById(Int $student_id):Student
+    public function getStudentById(Int $student_id):?Student
     {
         return Student::where('student_id', $student_id)->first();
     }

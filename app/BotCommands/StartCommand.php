@@ -31,7 +31,7 @@ class StartCommand extends Command
             if (!isset($user)) {
                 (new StudentService())->create($this->getUserId());
             }
-            $this->replyWithMessage(['text' => 'test command']);
+            $this->replyWithMessage(['text' => 'Введіть вашу групу']);
         }catch (\ErrorException $exception){
             logs()->info($exception);
         }

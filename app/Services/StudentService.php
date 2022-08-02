@@ -9,14 +9,14 @@ use Illuminate\Support\Carbon;
 
 class StudentService
 {
-    public function create(Int $student_id, String $group = 'ІПЗ-21'):Student
+    public function create(Int $student_id):Student
     {
         $now = Carbon::now();
-        $weekStartDate = $now->startOfWeek()->format('Y-m-d H:i');
+        $weekStartDate = $now->startOfWeek()->format('Y-m-d');
         return Student::create([
             "student_id" => $student_id,
             "week_start" => $weekStartDate,
-            "group" => $group
+            "group" => null
         ]);
     }
 
@@ -40,9 +40,9 @@ class StudentService
             $student->week_start = $weekStartDate;
         }elseif ($message_text == 'Сьогодні'){
             $weekStartDate = Carbon::now()->format('Y-m-d');
-        }elseif (in_array($message_text, (new DateHelper())->getDaysFromStartOfWeekToSomeDayArray())){
+        }elseif (in_array($message_text, DateHelper::getDaysFromStartOfWeekToSomeDayArray())){
             $weekStartDate = Carbon::parse($student->week_start)
-                ->addDays((new DateHelper())->getDaysFromStartOfWeekToSomeDay($message_text))->format('Y-m-d');
+                ->addDays(DateHelper::getDaysFromStartOfWeekToSomeDay($message_text))->format('Y-m-d');
         }else{
             $weekStartDate = $student->week_start;
         }
